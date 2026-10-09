@@ -13,9 +13,10 @@ __pycache__/
 # The Jupytext `.py` files are the source of truth.
 
 # Lab artifacts: weights stay local. The small evidence files below ARE committed,
-# because the auto-grader reads only what is in the repo.
-models/
-adapters/*
+models/*
+!models/sft-merged/
+models/sft-merged/*
+!models/sft-merged/config.json
 !adapters/.gitkeep
 !adapters/*/
 adapters/*/*

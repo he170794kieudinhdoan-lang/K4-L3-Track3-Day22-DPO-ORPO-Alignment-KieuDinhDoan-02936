@@ -58,9 +58,19 @@ print(f"sum log p = {total.item():.3f}   mean log p = {mean.item():.3f}")
 
 # %%
 def my_dpo_loss(pc, pr, rc, rr, beta=0.1):
-    """pc/pr: policy log-prob chosen/rejected; rc/rr: reference. Trả về loss trung bình."""
-    # TODO: viết bằng torch.nn.functional.logsigmoid
-    return None
+    """Tính hàm mất mát DPO (Direct Preference Optimization) theo Rafailov et al. (2023).
+    
+    - pc, pr: log-xác suất của policy cho phản hồi chosen và rejected.
+    - rc, rr: log-xác suất tương ứng từ reference model.
+    - beta: hệ số phạt khoảng cách KL so với reference model.
+    """
+    # Tính phần thưởng ngầm định (implicit reward)
+    r_chosen = beta * (pc - rc)
+    r_rejected = beta * (pr - rr)
+    
+    # Margin giữa cặp phản hồi
+    delta_reward = r_chosen - r_rejected
+    return -torch.nn.functional.logsigmoid(delta_reward).mean()
 
 
 # %%
